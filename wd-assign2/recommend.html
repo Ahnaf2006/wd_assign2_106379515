@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Recommendations - CineWave</title>
+    <style>
+        :root {
+            --bg-main: #07080a;
+            --bg-card: rgba(20, 26, 36, 0.9);
+            --bg-input: #11151c;
+            --accent-red: #e50914;
+            --accent-red-hover: #f6121d;
+            --accent-glow: rgba(229, 9, 20, 0.4);
+            --text-primary: #ffffff;
+            --text-secondary: #d1d5db;
+            --border-color: rgba(255, 255, 255, 0.12);
+        }
+
+        @keyframes pageGlideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: radial-gradient(circle at 50% 20%, #161b22 0%, #0b0c10 60%, #050608 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            animation: pageGlideIn 0.4s ease forwards;
+        }
+
+        header {
+            background: rgba(11, 12, 16, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo span {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff 0%, var(--accent-red) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        nav ul li a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.95rem;
+            padding: 0.6rem 1.1rem;
+            border-radius: 8px;
+            transition: all 0.25s ease;
+        }
+
+        nav ul li a:hover {
+            color: var(--text-primary);
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        nav ul li a.active {
+            color: var(--text-primary);
+            background-color: var(--accent-red);
+            box-shadow: 0 0 15px var(--accent-glow);
+        }
+
+        main {
+            max-width: 1200px;
+            width: 100%;
+            margin: 2.5rem auto;
+            padding: 0 1.5rem;
+            flex: 1;
+        }
+
+        h1 {
+            font-size: 2.4rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            color: #fff;
+        }
+
+        h1::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background: var(--accent-red);
+            border-radius: 2px;
+            margin-top: 8px;
+        }
+
+        p.subtitle {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .recommend-form {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2.5rem;
+            max-width: 650px;
+            margin: 0 auto;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        select {
+            width: 100%;
+            padding: 0.85rem 1rem;
+            background-color: var(--bg-input);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            outline: none;
+        }
+
+        select:focus {
+            border-color: var(--accent-red);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+
+        .btn-submit {
+            display: inline-block;
+            width: 100%;
+            text-align: center;
+            background-color: var(--accent-red);
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 700;
+            padding: 0.9rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 15px var(--accent-glow);
+        }
+
+        .btn-submit:hover {
+            background-color: var(--accent-red-hover);
+            transform: translateY(-2px);
+        }
+
+        #recommendation-result {
+            display: none;
+            margin: 2rem auto 0 auto;
+            padding: 2.5rem;
+            background: var(--bg-card);
+            border: 2px solid var(--accent-red);
+            border-radius: 16px;
+            max-width: 650px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7);
+            text-align: center;
+        }
+
+        #recommendation-result h2 {
+            font-size: 1.4rem;
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--accent-red);
+            color: #fff;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 700;
+            margin-top: 1.5rem;
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 15px var(--accent-glow);
+        }
+
+        .btn:hover {
+            background-color: var(--accent-red-hover);
+            transform: translateY(-2px);
+        }
+
+        footer {
+            background-color: rgba(7, 8, 10, 0.95);
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            padding: 2rem 1.5rem;
+            color: #9ca3af;
+            font-size: 0.85rem;
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="index.html" class="logo"><span>CineWave</span></a>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="movies.html">Movies</a></li>
+                <li><a href="booking.html">Book Tickets</a></li>
+                <li><a href="recommend.html" class="active">Recommendations</a></li>
+                <li><a href="register.html">Register</a></li>
+                <li><a href="watchlist.html">Watchlist</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h1>Find Movie Recommendations</h1>
+        <p class="subtitle">Tell us your preferences, and we will match the perfect film for your cinema night!</p>
+
+        <form id="recommendForm" class="recommend-form" onsubmit="generateRecommendation(event)">
+            <div class="form-group">
+                <label for="genre">Preferred Genre:</label>
+                <select id="genre" name="genre" required>
+                    <option value="">-- Select Genre --</option>
+                    <option value="Sci-Fi">Sci-Fi</option>
+                    <option value="Comedy">Comedy</option>
+                    <option value="Horror">Horror</option>
+                    <option value="Animation">Animation</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="audience">Target Audience:</label>
+                <select id="audience" name="audience" required>
+                    <option value="">-- Select Audience Group --</option>
+                    <option value="Family">Family & Kids</option>
+                    <option value="Teens">Teens</option>
+                    <option value="Adults">Adults</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn-submit">Get Recommendation</button>
+        </form>
+
+        <div id="recommendation-result">
+            <h2>🎉 Your Recommended Movie:</h2>
+            <p id="recommended-title" style="font-size: 1.6rem; font-weight: bold; color: var(--accent-red); margin: 0.75rem 0;"></p>
+            <p id="recommended-desc" style="color: var(--text-secondary);"></p>
+            <a href="booking.html" class="btn">Book Tickets Now</a>
+        </div>
+    </main>
+
+    <script>
+        function generateRecommendation(e) {
+            e.preventDefault();
+            const genre = document.getElementById('genre').value;
+            const resultBox = document.getElementById('recommendation-result');
+            const titleBox = document.getElementById('recommended-title');
+            const descBox = document.getElementById('recommended-desc');
+
+            let movie = "Interstellar";
+            let desc = "An epic sci-fi journey across space and time exploring human survival.";
+
+            if (genre === "Comedy") {
+                movie = "3 Idiots";
+                desc = "A hilarious and heartwarming comedy-drama about college life and following your passion.";
+            } else if (genre === "Horror") {
+                movie = "The Nun";
+                desc = "A terrifying supernatural horror mystery investigating a dark haunted abbey.";
+            } else if (genre === "Animation") {
+                movie = "The Incredibles";
+                desc = "An incredible animated family action adventure about a family of undercover superheroes.";
+            }
+
+            titleBox.textContent = movie;
+            descBox.textContent = desc;
+            resultBox.style.display = "block";
+        }
+    </script>
+
+    <footer>
+        <p>&copy; 2026 CineWave. All rights reserved.</p>
+    </footer>
+</body>
+</html>

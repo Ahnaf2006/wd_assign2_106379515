@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore Movies - CineWave</title>
+    <style>
+        :root {
+            --bg-main: #07080a;
+            --bg-card: rgba(20, 26, 36, 0.92);
+            --bg-card-hover: rgba(28, 37, 51, 1);
+            --accent-red: #e50914;
+            --accent-red-hover: #f6121d;
+            --accent-glow: rgba(229, 9, 20, 0.4);
+            --text-primary: #ffffff;
+            --text-secondary: #e2e8f0;
+            --border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        @keyframes pageGlideIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: radial-gradient(circle at 50% 20%, #161b22 0%, #0b0c10 60%, #050608 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            animation: pageGlideIn 0.4s ease forwards;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        /* Navigation Header */
+        header {
+            background: rgba(11, 12, 16, 0.95);
+            backdrop-filter: blur(14px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1.25rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo span {
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #ffffff 0%, var(--accent-red) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        nav ul li a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 1.05rem;
+            font-weight: 500;
+            padding: 0.65rem 1.25rem;
+            border-radius: 8px;
+            transition: all 0.25s ease;
+        }
+
+        nav ul li a:hover {
+            color: var(--text-primary);
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        nav ul li a.active {
+            color: var(--text-primary);
+            background-color: var(--accent-red);
+            box-shadow: 0 0 18px var(--accent-glow);
+        }
+
+        /* Main Content Layout */
+        main {
+            max-width: 1280px;
+            width: 100%;
+            margin: 3rem auto;
+            padding: 0 2rem;
+            flex: 1;
+        }
+
+        h1 {
+            font-size: 2.75rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            color: #fff;
+            letter-spacing: -0.5px;
+        }
+
+        h1::after {
+            content: '';
+            display: block;
+            width: 70px;
+            height: 4px;
+            background: var(--accent-red);
+            border-radius: 2px;
+            margin-top: 10px;
+        }
+
+        p.subtitle {
+            color: var(--text-secondary);
+            font-size: 1.15rem;
+            margin-bottom: 2.5rem;
+        }
+
+        /* Strict Grid Layout */
+        .movie-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2.5rem;
+        }
+
+        /* Movie Card Styling */
+        .movie-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .movie-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--accent-red);
+            box-shadow: 0 16px 35px rgba(229, 9, 20, 0.35);
+            background-color: var(--bg-card-hover);
+        }
+
+        .movie-card img {
+            width: 100% !important;
+            height: 340px !important;
+            max-height: 340px !important;
+            object-fit: cover !important;
+            display: block;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .movie-card-content {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .movie-card-content h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 0.6rem;
+        }
+
+        .movie-card-content p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            margin-bottom: 0.75rem;
+            line-height: 1.5;
+        }
+
+        /* Action Button */
+        .btn {
+            display: inline-block;
+            text-align: center;
+            background-color: var(--accent-red);
+            color: #fff;
+            padding: 0.9rem 1.25rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.05rem;
+            margin-top: auto;
+            transition: background-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+            box-shadow: 0 4px 15px var(--accent-glow);
+        }
+
+        .btn:hover {
+            background-color: var(--accent-red-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(246, 18, 29, 0.5);
+        }
+
+        /* Footer */
+        footer {
+            background-color: rgba(7, 8, 10, 0.95);
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            padding: 2.5rem 2rem;
+            color: #94a3b8;
+            font-size: 0.95rem;
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="index.html" class="logo"><span>CineWave</span></a>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="movies.html" class="active">Movies</a></li>
+                <li><a href="booking.html">Book Tickets</a></li>
+                <li><a href="recommend.html">Recommendations</a></li>
+                <li><a href="register.html">Register</a></li>
+                <li><a href="watchlist.html">Watchlist</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h1>Featured Movies</h1>
+        <p class="subtitle">Explore our full collection across all genres.</p>
+
+        <div class="movie-grid">
+            <!-- 1. 3 Idiots -->
+            <article class="movie-card">
+                <img src="image/3 idiots(comedy).jpg" alt="3 Idiots Poster">
+                <div class="movie-card-content">
+                    <h2>3 Idiots</h2>
+                    <p><strong>Genre:</strong> Comedy / Drama</p>
+                    <p>Two friends search for their long-lost college companion while reflecting on their hilarious college years.</p>
+                    <a href="booking.html" class="btn">Book Now</a>
+                </div>
+            </article>
+
+            <!-- 2. Interstellar -->
+            <article class="movie-card">
+                <img src="image/interstellar(sci-fi).jpg" alt="Interstellar Poster">
+                <div class="movie-card-content">
+                    <h2>Interstellar</h2>
+                    <p><strong>Genre:</strong> Sci-Fi / Adventure</p>
+                    <p>Explorers travel through a wormhole in space in an attempt to ensure humanity's survival.</p>
+                    <a href="booking.html" class="btn">Book Now</a>
+                </div>
+            </article>
+
+            <!-- 3. The Nun -->
+            <article class="movie-card">
+                <img src="image/the nun(horror).jpg" alt="The Nun Poster">
+                <div class="movie-card-content">
+                    <h2>The Nun</h2>
+                    <p><strong>Genre:</strong> Horror / Mystery</p>
+                    <p>A priest and a novitiate investigate a haunted abbey with a dark secret in Romania.</p>
+                    <a href="booking.html" class="btn">Book Now</a>
+                </div>
+            </article>
+
+            <!-- 4. The Incredibles -->
+            <article class="movie-card">
+                <img src="image/animation.jpg" alt="The Incredibles Poster">
+                <div class="movie-card-content">
+                    <h2>The Incredibles</h2>
+                    <p><strong>Genre:</strong> Animation / Action</p>
+                    <p>A family of undercover superheroes are forced back into action to save the world.</p>
+                    <a href="booking.html" class="btn">Book Now</a>
+                </div>
+            </article>
+
+            <!-- 5. Get Out -->
+            <article class="movie-card">
+                <img src="image/action movie.jpg" alt="Get Out Poster">
+                <div class="movie-card-content">
+                    <h2>Get Out</h2>
+                    <p><strong>Genre:</strong> Thriller / Horror</p>
+                    <p>A young man's weekend visit to his girlfriend's family turns into a psychological nightmare.</p>
+                    <a href="booking.html" class="btn">Book Now</a>
+                </div>
+            </article>
+
+            <!-- 6. Finlay Kane -->
+            <article class="movie-card">
+                <img src="image/drama.jpg" alt="Finlay Kane Poster">
+                <div class="movie-card-content">
+                    <h2>Finlay Kane</h2>
+                    <p><strong>Genre:</strong> Action / Drama</p>
+                    <p>An intense action thriller following high-stakes espionage and personal showdowns.</p>
+                    <a href="booking.html" class="btn">Book Now</a>
+                </div>
+            </article>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 CineWave. All rights reserved.</p>
+    </footer>
+</body>
+</html>

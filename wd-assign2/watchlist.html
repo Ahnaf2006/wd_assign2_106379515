@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Watchlist - CineWave</title>
+    <style>
+        :root {
+            --bg-main: #07080a;
+            --bg-card: rgba(20, 26, 36, 0.9);
+            --bg-card-hover: rgba(28, 37, 51, 1);
+            --accent-red: #e50914;
+            --accent-red-hover: #f6121d;
+            --accent-glow: rgba(229, 9, 20, 0.4);
+            --text-primary: #ffffff;
+            --text-secondary: #d1d5db;
+            --border-color: rgba(255, 255, 255, 0.12);
+        }
+
+        @keyframes pageGlideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: radial-gradient(circle at 50% 20%, #161b22 0%, #0b0c10 60%, #050608 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            animation: pageGlideIn 0.4s ease forwards;
+        }
+
+        header {
+            background: rgba(11, 12, 16, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo span {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff 0%, var(--accent-red) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        nav ul li a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.95rem;
+            padding: 0.6rem 1.1rem;
+            border-radius: 8px;
+            transition: all 0.25s ease;
+        }
+
+        nav ul li a:hover {
+            color: var(--text-primary);
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        nav ul li a.active {
+            color: var(--text-primary);
+            background-color: var(--accent-red);
+            box-shadow: 0 0 15px var(--accent-glow);
+        }
+
+        main {
+            max-width: 1200px;
+            width: 100%;
+            margin: 2.5rem auto;
+            padding: 0 1.5rem;
+            flex: 1;
+        }
+
+        h1 {
+            font-size: 2.4rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            color: #fff;
+        }
+
+        h1::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background: var(--accent-red);
+            border-radius: 2px;
+            margin-top: 8px;
+        }
+
+        p.subtitle {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .movie-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .movie-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .movie-card:hover {
+            transform: translateY(-6px);
+            border-color: var(--accent-red);
+            box-shadow: 0 12px 30px rgba(229, 9, 20, 0.3);
+            background-color: var(--bg-card-hover);
+        }
+
+        .movie-card img {
+            width: 100% !important;
+            height: 320px !important;
+            max-height: 320px !important;
+            object-fit: cover !important;
+            display: block;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .movie-card-content {
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .movie-card-content h2 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
+
+        .movie-card-content p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .btn {
+            display: inline-block;
+            text-align: center;
+            background-color: var(--accent-red);
+            color: #fff;
+            padding: 0.8rem 1rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 700;
+            margin-top: auto;
+            transition: background-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+            box-shadow: 0 4px 15px var(--accent-glow);
+        }
+
+        .btn:hover {
+            background-color: var(--accent-red-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(246, 18, 29, 0.5);
+        }
+
+        footer {
+            background-color: rgba(7, 8, 10, 0.95);
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            padding: 2rem 1.5rem;
+            color: #9ca3af;
+            font-size: 0.85rem;
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="index.html" class="logo"><span>CineWave</span></a>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="movies.html">Movies</a></li>
+                <li><a href="booking.html">Book Tickets</a></li>
+                <li><a href="recommend.html">Recommendations</a></li>
+                <li><a href="register.html">Register</a></li>
+                <li><a href="watchlist.html" class="active">Watchlist</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h1>My Movie Watchlist</h1>
+        <p class="subtitle">Keep track of the movies you want to experience next.</p>
+
+        <div class="movie-grid">
+            <article class="movie-card">
+                <img src="image/interstellar(sci-fi).jpg" alt="Interstellar Poster">
+                <div class="movie-card-content">
+                    <h2>Interstellar</h2>
+                    <p><strong>Status:</strong> Saved to Watchlist</p>
+                    <a href="booking.html" class="btn">Book Now</a>
+                </div>
+            </article>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 CineWave. All rights reserved.</p>
+    </footer>
+</body>
+</html>
